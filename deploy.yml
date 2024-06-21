@@ -1,0 +1,49 @@
+services:
+  backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: albadisha/robot-cleaner:1.0.0
+    container_name: robot-cleaner
+    hostname: robot-cleaner
+    ports:
+    - 5555:5000
+    env_file:
+    - .env
+    networks:
+    - backend
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: always
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    privileged: false
+
+  database:
+    container_name: postgres
+    hostname: postgres
+    image: postgres:16.3-alpine
+    ports:
+    - 5432:5432
+    env_file:
+    - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+    security_opt:
+      - no-new-privileges:true
+    privileged: false
+    networks:
+    - backend
+    restart: always
+
+networks:
+  backend:
+    name: backend
+    driver: bridge

@@ -1,0 +1,46 @@
+services:
+  tester:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: albadisha/robot-cleaner:1.0.0
+    container_name: tester
+    hostname: tester
+    command: ["/bin/ash", "-c", "alembic upgrade head && python3 -m pytest tests"]
+    env_file:
+    - .env
+    networks:
+    - tester
+    depends_on:
+      database-test:
+        condition: service_healthy
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    privileged: false
+    restart: no
+
+  database-test:
+    container_name: postgres-test
+    hostname: postgres
+    image: postgres:16.3-alpine
+    env_file:
+    - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 5s
+    security_opt:
+      - no-new-privileges:true
+    privileged: false
+    restart: on-failure
+    networks:
+    - tester
+
+networks:
+  tester:
+    name: tester
+    driver: bridge
