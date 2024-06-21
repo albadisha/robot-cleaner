@@ -26,18 +26,15 @@ def add_execution(
     result: int,
     duration: float,
 ) -> Execution:
-    execution = Execution(
-        commands=commands,
-        result=result,
-        duration=duration
-    )
+    execution = Execution(commands=commands, result=result, duration=duration)
     session.add(execution)
     session.commit()
     return fetch_execution(session, execution)
 
 
 def fetch_execution(
-    session: Session, execution: Execution,
+    session: Session,
+    execution: Execution,
 ) -> Execution:
     return (
         session.query(Execution)

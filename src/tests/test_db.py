@@ -11,7 +11,9 @@ def test_execute_cleaning_on_exception_max_tries(
     Test db calls giving up after 3 retries on operational errors.
     """
     m_execute_cleaning.side_effect = OperationalError(
-        None, None, "Connection Failure",
+        None,
+        None,
+        "Connection Failure",
     )
 
     app.test_client().post(
@@ -20,11 +22,11 @@ def test_execute_cleaning_on_exception_max_tries(
     )
 
     assert m_execute_cleaning.call_count == 3
-    assert "Backing off execute_cleaning(...)" in caplog.records[0].message # noqa
-    assert "Backing off execute_cleaning(...)" in caplog.records[1].message # noqa
+    assert "Backing off execute_cleaning(...)" in caplog.records[0].message  # noqa
+    assert "Backing off execute_cleaning(...)" in caplog.records[1].message  # noqa
     assert (
         "Giving up execute_cleaning(...) after 3 tries"
-        in caplog.records[2].message
+        in caplog.records[2].message  # noqa
     )
 
 
@@ -36,7 +38,9 @@ def test_no_retries_on_non_operational_errors(
     Test db calls giving up after one try on non operational errors.
     """
     m_execute_cleaning.side_effect = DataError(
-        None, None, "Value out of range",
+        None,
+        None,
+        "Value out of range",
     )
 
     app.test_client().post(

@@ -8,7 +8,8 @@ from werkzeug.exceptions import BadRequest
 
 from robot_cleaner.db import db_session
 from robot_cleaner.models.execution import (
-    Execution, add_execution,
+    Execution,
+    add_execution,
 )
 
 
@@ -53,6 +54,7 @@ class MovingPath(typing.TypedDict):
     """
     Represents robot's moving path.
     """
+
     start: Coordinates
     commands: typing.List[Directions]
 
@@ -83,7 +85,7 @@ def execute_cleaning(session: Session):
         session,
         commands=len(data.get("commands")),
         result=result,
-        duration=round(timestamp2 - timestamp1, 6)
+        duration=round(timestamp2 - timestamp1, 6),
     )
     return jsonify(serialize_execution(execution))
 
@@ -138,8 +140,7 @@ def validate_request_data(data: MovingPath):
 
     if len(data.get("commands")) > 10000:
         raise BadRequest(
-            "Number of commands should be lower",
-            f" than 10000: {len(data.get("commands"))}"
+            f"Number of commands should be lower than 10000: {len(data.get("commands"))}"  # noqa
         )
 
     for command in data.get("commands"):

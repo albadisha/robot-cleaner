@@ -16,6 +16,7 @@ def db_session(func):
     """
     Use this decorator to pass a session object to the wrapped `func`.
     """
+
     @backoff.on_exception(
         backoff.expo,
         OperationalError,

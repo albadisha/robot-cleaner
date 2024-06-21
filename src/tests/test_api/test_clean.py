@@ -13,15 +13,9 @@ def test_execute_cleaning(app, database):
             "y": 22,
         },
         "commands": [
-            {
-                "direction": "east",
-                "steps": 2
-            },
-            {
-                "direction": "north",
-                "steps": 1
-            }
-        ]
+            {"direction": "east", "steps": 2},
+            {"direction": "north", "steps": 1},
+        ],
     }
     response = app.test_client().post(
         "tibber-developer-test/enter-path", json=request_body
@@ -29,16 +23,12 @@ def test_execute_cleaning(app, database):
 
     assert response.status_code == 200
     assert response.json["result"] == 4
-    assert (
-        response.json["commands"] == len(request_body["commands"])
-    )
+    assert response.json["commands"] == len(request_body["commands"])
     assert response.json["timestamp"] is not None
     assert response.json["duration"] is not None
 
     # id=2 since one record already exists in test db
-    assert (
-        response.json["uri"] == "/tibber-developer-test/enter-path/2"
-    )
+    assert response.json["uri"] == "/tibber-developer-test/enter-path/2"
 
     request_body = {
         "start": {
@@ -46,19 +36,10 @@ def test_execute_cleaning(app, database):
             "y": 22,
         },
         "commands": [
-            {
-                "direction": "east",
-                "steps": 2
-            },
-            {
-                "direction": "north",
-                "steps": 1
-            },
-            {
-                "direction": "west",
-                "steps": 3
-            }
-        ]
+            {"direction": "east", "steps": 2},
+            {"direction": "north", "steps": 1},
+            {"direction": "west", "steps": 3},
+        ],
     }
     response = app.test_client().post(
         "tibber-developer-test/enter-path", json=request_body
@@ -66,9 +47,7 @@ def test_execute_cleaning(app, database):
 
     assert response.status_code == 200
     assert response.json["result"] == 7
-    assert (
-        response.json["commands"] == len(request_body["commands"])
-    )
+    assert response.json["commands"] == len(request_body["commands"])
 
 
 def test_execute_cleaning_db_insertion(app, database):
@@ -81,15 +60,9 @@ def test_execute_cleaning_db_insertion(app, database):
             "y": 22,
         },
         "commands": [
-            {
-                "direction": "east",
-                "steps": 2
-            },
-            {
-                "direction": "north",
-                "steps": 1
-            }
-        ]
+            {"direction": "east", "steps": 2},
+            {"direction": "north", "steps": 1},
+        ],
     }
 
     with Session() as session:
@@ -115,44 +88,21 @@ def test_execute_cleaning_complex_directions(app, database):
             "y": 1,
         },
         "commands": [
-            {
-                "direction": "south",
-                "steps": 1
-            },
-            {
-                "direction": "north",
-                "steps": 2
-            },
-            {
-                "direction": "east",
-                "steps": 1
-            },
-            {
-                "direction": "west",
-                "steps": 2
-            },
-            {
-                "direction": "west",
-                "steps": 2
-            },
-            {
-                "direction": "north",
-                "steps": 1
-            },
-            {
-                "direction": "east",
-                "steps": 2
-            }
-        ]
+            {"direction": "south", "steps": 1},
+            {"direction": "north", "steps": 2},
+            {"direction": "east", "steps": 1},
+            {"direction": "west", "steps": 2},
+            {"direction": "west", "steps": 2},
+            {"direction": "north", "steps": 1},
+            {"direction": "east", "steps": 2},
+        ],
     }
     response = app.test_client().post(
         "tibber-developer-test/enter-path", json=request_body
     )
     assert response.status_code == 200
     assert response.json["result"] == 10
-    assert (
-        response.json["commands"] == len(request_body["commands"])
-    )
+    assert response.json["commands"] == len(request_body["commands"])
 
 
 def test_execute_cleaning_repeat_path(app, database):
@@ -165,15 +115,9 @@ def test_execute_cleaning_repeat_path(app, database):
             "y": 2,
         },
         "commands": [
-            {
-                "direction": "south",
-                "steps": 2
-            },
-            {
-                "direction": "north",
-                "steps": 2
-            }
-        ]
+            {"direction": "south", "steps": 2},
+            {"direction": "north", "steps": 2},
+        ],
     }
     response = app.test_client().post(
         "tibber-developer-test/enter-path", json=request_body
@@ -181,9 +125,7 @@ def test_execute_cleaning_repeat_path(app, database):
 
     assert response.status_code == 200
     assert response.json["result"] == 3
-    assert (
-        response.json["commands"] == len(request_body["commands"])
-    )
+    assert response.json["commands"] == len(request_body["commands"])
 
 
 def test_execute_cleaning_negative_input(app, database):
@@ -196,23 +138,11 @@ def test_execute_cleaning_negative_input(app, database):
             "y": -400,
         },
         "commands": [
-            {
-                "direction": "south",
-                "steps": 100
-            },
-            {
-                "direction": "north",
-                "steps": 50
-            },
-            {
-                "direction": "east",
-                "steps": 7
-            },
-            {
-                "direction": "west",
-                "steps": 14
-            }
-        ]
+            {"direction": "south", "steps": 100},
+            {"direction": "north", "steps": 50},
+            {"direction": "east", "steps": 7},
+            {"direction": "west", "steps": 14},
+        ],
     }
     response = app.test_client().post(
         "tibber-developer-test/enter-path", json=request_body
@@ -220,9 +150,7 @@ def test_execute_cleaning_negative_input(app, database):
 
     assert response.status_code == 200
     assert response.json["result"] == 115
-    assert (
-        response.json["commands"] == len(request_body["commands"])
-    )
+    assert response.json["commands"] == len(request_body["commands"])
 
 
 def test_execute_cleaning_bad_request_data(app, database):
@@ -235,11 +163,8 @@ def test_execute_cleaning_bad_request_data(app, database):
             "y": 22,
         },
         "commands": [
-            {
-                "direction": "east",
-                "steps": -22
-            },
-        ]
+            {"direction": "east", "steps": -22},
+        ],
     }
     response = app.test_client().post(
         "tibber-developer-test/enter-path", json=request_body
@@ -252,11 +177,8 @@ def test_execute_cleaning_bad_request_data(app, database):
             "y": 22,
         },
         "commands": [
-            {
-                "direction": "mess",
-                "steps": 2
-            },
-        ]
+            {"direction": "mess", "steps": 2},
+        ],
     }
     response = app.test_client().post(
         "tibber-developer-test/enter-path", json=request_body
@@ -269,11 +191,8 @@ def test_execute_cleaning_bad_request_data(app, database):
             "y": 22,
         },
         "commands": [
-            {
-                "direction": "east",
-                "steps": 2
-            },
-        ]
+            {"direction": "east", "steps": 2},
+        ],
     }
     response = app.test_client().post(
         "tibber-developer-test/enter-path", json=request_body
@@ -286,11 +205,8 @@ def test_execute_cleaning_bad_request_data(app, database):
             "y": -200000,
         },
         "commands": [
-            {
-                "direction": "east",
-                "steps": 2
-            },
-        ]
+            {"direction": "east", "steps": 2},
+        ],
     }
     response = app.test_client().post(
         "tibber-developer-test/enter-path", json=request_body
@@ -326,7 +242,7 @@ def test_calculate_unique_places():
             "x": 2,
             "y": 2,
         },
-        "commands": []
+        "commands": [],
     }
 
     unique_places = calculate_unique_places(data)
