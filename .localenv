@@ -1,0 +1,7 @@
+export POSTGRES_HOST='postgres'
+export POSTGRES_USER='postgres'
+export POSTGRES_PASSWORD='password'
+export POSTGRES_DB='robot_db'
+export POSTGRES_PORT=5432
+export AUTH_API_KEY='production-token'
+export IS_PRODUCTION=false
