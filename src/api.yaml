@@ -1,0 +1,116 @@
+openapi: 3.0.0
+info:
+  title: Cleaning Robot API
+  description: Cleaning Robot API
+  version: "1.0"
+servers:
+  - url: http://127.0.0.1:5000
+    description: Production API
+  - url: http://127.0.0.1:5000
+    description: Staging API
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+
+  schemas:
+    Execution:
+      type: object
+      properties:
+        commands_count:
+          type: number
+          format: integer
+          minimum: 0
+          maximum: 10000
+          readOnly: true
+          example: 2
+          description: Number of the commands in robot's cleaning path.
+        duration:
+          type: number
+          format: float
+          example: 0.000123
+          readOnly: true
+          description: Duration of the calculation of unique places cleaned.
+        timestamp:
+          type: string
+          readOnly: true
+          format: date-time
+          description: Time of record insertion.
+        result:
+          type: number
+          format: integer
+          example: 4
+          nullable: false
+          readOnly: true
+          description: Number of unique places cleaned.
+        moving_path:
+          $ref: "#/components/schemas/MovingPath"
+        uri:
+          type: string
+          readOnly: true
+          example: /tibber-developer-test/enter-path/1
+          description: URI of created record. Used to avoid uri manual build from external services.
+
+    Coordinates:
+      type: object
+      properties:
+        x:
+          type: number
+          format: integer
+          minimum: -100000
+          maximum: 100000
+          example: 10
+        y:
+          type: number
+          format: integer
+          minimum: -100000
+          maximum: 100000
+          example: 22
+      
+    Direction:
+      type: object
+      properties:
+        direction:
+          type: string
+          example: north
+        steps:
+          type: number
+          format: integer
+          minimum: 0
+          maximum: 100000
+          example: 2
+
+    MovingPath:
+      type: object
+      properties:
+        start:
+          $ref: "#/components/schemas/Coordinates"
+        commands:
+          type: array
+          items:
+            $ref: "#/components/schemas/Direction"
+
+security:
+  - BearerAuth: []
+
+paths:
+  /tibber-developer-test/enter-path:
+    post:
+      summary: Clean office space.
+      description: |
+        Return number of unique places cleaned by robot.
+      tags: ["Clean"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MovingPath"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Execution"

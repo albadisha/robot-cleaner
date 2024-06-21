@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "robot"
+version = "0.1.0"
+description = ""
+authors = ["Alba Disha <albadisha1@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+Flask = "^3.0.3"
+SQLAlchemy = "^2.0.31"
+backoff = "^2.2.1"
+alembic = "^1.13.1"
+psycopg2 = "^2.9.9"
+structlog = "^24.2.0"
+uwsgi = "^2.0.26"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+flake8 = "^7.1.0"
+pytest = "^8.2.2"
+responses = "^0.25.3"
+mock = "^5.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
