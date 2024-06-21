@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 
 
 with pytest.MonkeyPatch.context() as monkeypatch:
-    monkeypatch.setenv("AUTH_API_KEY", "token-123")
+    # random api token in the test environment to test authentication
+    monkeypatch.setenv("AUTH_API_KEY", "random-test-token")
 
     from robot_cleaner import db
     from robot_cleaner.app import create_app

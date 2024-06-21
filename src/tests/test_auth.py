@@ -1,4 +1,4 @@
-HEADERS = {"Authorization": "Bearer token-123"}
+HEADERS = {"Authorization": "Bearer random-test-token"}
 UNAUTH_HEADERS = {"Authorization": "Bearer token-invalid"}
 
 
